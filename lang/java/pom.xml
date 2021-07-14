@@ -7,9 +7,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.apache.aingle</groupId>
+    <groupId>org.aingle.apache</groupId>
     <artifactId>aingle-toplevel</artifactId>
-    <version>1.11.0-SNAPSHOT</version>
+    <version>0.0.1</version>
     <relativePath>../../</relativePath>
   </parent>
 
