@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>aingle-maven-plugin-test</artifactId>
+  <packaging>jar</packaging>
+
+  <name>testproject</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>aingle-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>induce</id>
+            <goals>
+              <goal>induce</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <javaSourceDirectories>
+            <directory>${basedir}/src/test/java/org/apache/aingle/protocols</directory>
+          </javaSourceDirectories>
+          <aingleOutputDirectory>${basedir}/target/test-harness/protocol</aingleOutputDirectory>
+          <project implementation="org.apache.maven.plugin.testing.stubs.MavenProjectStub"/>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.aingle</groupId>
+      <artifactId>aingle</artifactId>
+    </dependency>
+  </dependencies>
+</project>

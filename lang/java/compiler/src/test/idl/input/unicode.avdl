@@ -1,0 +1,15 @@
+/**
+
+ */
+
+/**
+* This is a test that UTF8 functions correctly.
+* このテストでは、UTF - 8で正しく機能している。
+* 这是一个测试，UTF - 8的正常运行。
+*/
+protocol Протоколы {
+  record Структура {
+    string Строковый;
+    string 文字列;
+  }
+}

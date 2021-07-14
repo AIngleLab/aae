@@ -1,0 +1,17 @@
+/**
+
+ */
+
+@version("1.0.5")
+@namespace("org.apache.aingle.ipc.specific")
+protocol nestedimport {
+    import idl "reservedwords.avdl";
+    import protocol "bar.avpr";
+    import schema "position.ain";
+    import schema "player.ain";
+
+    record ImportBar {
+        aingle.examples.baseball.Player  foo;
+    }
+
+}

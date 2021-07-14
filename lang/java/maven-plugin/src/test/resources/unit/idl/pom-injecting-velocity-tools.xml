@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>aingle-parent</artifactId>
+    <groupId>org.apache.aingle</groupId>
+    <version>1.11.0-SNAPSHOT</version>
+    <relativePath>../../../../../../../../../</relativePath>
+  </parent>
+
+  <artifactId>aingle-maven-plugin-test</artifactId>
+  <packaging>jar</packaging>
+
+  <name>testproject</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>aingle-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>idl</id>
+            <goals>
+              <goal>idl-protocol</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <sourceDirectory>${basedir}/src/test</sourceDirectory>
+          <outputDirectory>${basedir}/target/test-harness/idl-inject</outputDirectory>
+          <stringType>String</stringType>
+          <templateDirectory>
+            ${basedir}/src/test/resources/templates/
+          </templateDirectory>
+          <velocityToolsClassesNames>
+            <param>java.lang.String</param>
+          </velocityToolsClassesNames>
+          <project implementation="org.apache.maven.plugin.testing.stubs.MavenProjectStub"/>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.aingle</groupId>
+      <artifactId>aingle</artifactId>
+      <version>${parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+  </dependencies>
+</project>

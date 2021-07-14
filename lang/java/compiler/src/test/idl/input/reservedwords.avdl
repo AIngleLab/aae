@@ -1,0 +1,8 @@
+/**
+
+ */
+
+protocol Foo {
+  void `error`();
+  void `void`();
+}

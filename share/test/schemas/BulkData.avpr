@@ -1,0 +1,21 @@
+
+{"namespace": "org.apache.aingle.test",
+ "protocol": "BulkData",
+
+ "types": [],
+
+ "messages": {
+
+     "read": {
+         "request": [],
+         "response": "bytes"
+     },
+
+     "write": {
+         "request": [ {"name": "data", "type": "bytes"} ],
+         "response": "null"
+     }
+
+ }
+
+}

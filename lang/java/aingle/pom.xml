@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>aingle-parent</artifactId>
+    <groupId>org.apache.aingle</groupId>
+    <version>1.11.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <artifactId>aingle</artifactId>
+
+  <name>Apache AIngle</name>
+  <url>https://apache.aingle.ai</url>
+  <description>AIngle core components</description>
+  <packaging>bundle</packaging>
+
+  <properties>
+    <main.basedir>${project.parent.parent.basedir}</main.basedir>
+    <osgi.import>
+      !org.apache.aingle*,
+      com.fasterxml.jackson*,
+      org.xerial.snappy;resolution:=optional,
+      sun.misc;resolution:=optional,
+      *
+    </osgi.import>
+    <osgi.export>org.apache.aingle*;version="${project.version}"</osgi.export>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>../../../share/schemas</directory>
+        <includes>
+          <include>org/apache/aingle/data/Json.ain</include>
+        </includes>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.aingle</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <parallel>none</parallel>
+        </configuration>
+        <executions>
+          <execution>
+            <id>test-with-custom-coders</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <systemPropertyVariables>
+                <org.apache.aingle.specific.use_custom_coders>true</org.apache.aingle.specific.use_custom_coders>
+              </systemPropertyVariables>
+            </configuration>
+          </execution>
+          <execution>
+            <id>test-with-fast-reader</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+            <configuration>
+              <systemPropertyVariables>
+                <org.apache.aingle.fastread>true</org.apache.aingle.fastread>
+              </systemPropertyVariables>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>interop-data-generate</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>${exec-plugin.version}</version>
+            <executions>
+              <!-- Generate random data for interop tests, using null codec -->
+              <execution>
+                <id>interop-generate-null-codec</id>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <mainClass>org.apache.aingle.util.RandomData</mainClass>
+                  <arguments>
+                    <argument>../../../share/test/schemas/interop.ain</argument>
+                    <argument>../../../build/interop/data/java.aingle</argument>
+                    <argument>100</argument>
+                  </arguments>
+                </configuration>
+                <goals><goal>java</goal></goals>
+              </execution>
+
+              <!-- Generate random data for interop tests, using deflate codec -->
+              <execution>
+                <id>interop-generate-deflate-codec</id>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <mainClass>org.apache.aingle.util.RandomData</mainClass>
+                  <arguments>
+                    <argument>../../../share/test/schemas/interop.ain</argument>
+                    <argument>../../../build/interop/data/java_deflate.aingle</argument>
+                    <argument>100</argument>
+                    <argument>deflate</argument>
+                  </arguments>
+                </configuration>
+                <goals><goal>java</goal></goals>
+              </execution>
+
+              <!-- Generate random data for interop tests, using snappy codec -->
+              <execution>
+                <id>interop-generate-snappy-codec</id>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <mainClass>org.apache.aingle.util.RandomData</mainClass>
+                  <arguments>
+                    <argument>../../../share/test/schemas/interop.ain</argument>
+                    <argument>../../../build/interop/data/java_snappy.aingle</argument>
+                    <argument>100</argument>
+                    <argument>snappy</argument>
+                  </arguments>
+                </configuration>
+                <goals><goal>java</goal></goals>
+              </execution>
+
+              <!-- Generate random data for interop tests, using bzip2 codec -->
+              <execution>
+                <id>interop-generate-bzip2-codec</id>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <mainClass>org.apache.aingle.util.RandomData</mainClass>
+                  <arguments>
+                    <argument>../../../share/test/schemas/interop.ain</argument>
+                    <argument>../../../build/interop/data/java_bzip2.aingle</argument>
+                    <argument>100</argument>
+                    <argument>bzip2</argument>
+                  </arguments>
+                </configuration>
+                <goals><goal>java</goal></goals>
+              </execution>
+
+              <!-- Generate random data for interop tests, using xz codec -->
+              <execution>
+                <id>interop-generate-xz-codec</id>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <mainClass>org.apache.aingle.util.RandomData</mainClass>
+                  <arguments>
+                    <argument>../../../share/test/schemas/interop.ain</argument>
+                    <argument>../../../build/interop/data/java_xz.aingle</argument>
+                    <argument>100</argument>
+                    <argument>xz</argument>
+                  </arguments>
+                </configuration>
+                <goals><goal>java</goal></goals>
+              </execution>
+
+              <!-- Generate random data for interop tests, using zstandard codec -->
+              <execution>
+                <id>interop-generate-zstandard-codec</id>
+                <phase>generate-resources</phase>
+                <configuration>
+                  <mainClass>org.apache.aingle.util.RandomData</mainClass>
+                  <arguments>
+                    <argument>../../../share/test/schemas/interop.ain</argument>
+                    <argument>../../../build/interop/data/java_zstandard.aingle</argument>
+                    <argument>100</argument>
+                    <argument>zstandard</argument>
+                  </arguments>
+                </configuration>
+                <goals><goal>java</goal></goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.xerial.snappy</groupId>
+      <artifactId>snappy-java</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.tukaani</groupId>
+      <artifactId>xz</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.github.luben</groupId>
+      <artifactId>zstd-jni</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>

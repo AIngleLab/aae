@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>aingle-parent</artifactId>
+    <groupId>org.apache.aingle</groupId>
+    <version>1.11.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <artifactId>aingle-compiler</artifactId>
+
+  <name>Apache AIngle Compiler</name>
+  <packaging>bundle</packaging>
+  <url>https://apache.aingle.ai</url>
+  <description>Compilers for AIngle IDL and AIngle Specific Java API</description>
+
+  <properties>
+    <main.basedir>${project.parent.parent.basedir}</main.basedir>
+    <osgi.import>
+      !org.apache.aingle.compiler*,
+      org.apache.aingle*;version="${project.version}",
+      org.apache.commons.lang3*,
+      *
+    </osgi.import>
+    <osgi.export>org.apache.aingle.compiler*;version="${project.version}"</osgi.export>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/velocity</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>src/main/velocity</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/idl</directory>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.aingle.compiler</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <!-- AIngle generates a parser class with javacc. By default, this looks in src/main/javacc
+        and outputs to target/generated-sources/javacc See http://mojo.codehaus.org/javacc-maven-plugin/javacc-mojo.html
+        for more info on using this plugin. -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javacc-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>javacc</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>javacc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- some tests hang if not run in a separate JVM -->
+          <forkCount>1</forkCount>
+          <reuseForks>false</reuseForks>
+          <parallel>none</parallel>
+          <systemPropertyVariables>
+            <test.idl.dir>${project.basedir}/src/test/idl</test.idl.dir>
+          </systemPropertyVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>java</executable>
+              <workingDirectory>/tmp</workingDirectory>
+              <classpathScope>test</classpathScope>
+              <arguments>
+                <argument>-classpath</argument>
+                <classpath></classpath>
+                <argument>org.apache.aingle.compiler.specific.SchemaTask</argument>
+                <argument>${project.basedir}/src/test/resources/full_record_v1.ain</argument>
+                <argument>${project.basedir}/src/test/resources/full_record_v2.ain</argument>
+                <argument>${project.basedir}/target/generated-test-sources</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <!--
+              Usually code is generated using a special-purpose maven plugin and the plugin
+              automatically adds the generated sources into project.
+              Here since general-purpose exec plugin is used for generating code, we need to manually
+              add the sources.
+            -->
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/target/generated-test-sources</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <!--
+              Usually code is generated using a special-purpose maven plugin and the plugin
+              automatically adds the generated sources into project.
+              Here since general-purpose exec plugin is used for generating code, we need to manually
+              add the sources.
+            -->
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/target/generated-sources/javacc</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                      <goal>exec</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <execute/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>aingle</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>${commons-lang.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity-engine-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.ant</groupId>
+      <artifactId>ant</artifactId>
+      <version>${ant.version}</version>
+      <!-- can only be used from within ant -->
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+</project>

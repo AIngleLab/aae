@@ -1,0 +1,34 @@
+
+
+# This file configures github and jira notifications based on
+# https://s.apache.org/asfyaml-notify
+
+github:
+  description: "Apache AIngle is a data serialization system."
+  homepage: https://apache.aingle.ai/
+  labels:
+    - aingle
+    - bigdata
+    - c
+    - cplusplus
+    - csharp
+    - dotnet
+    - java
+    - perl
+    - php
+    - python
+    - ruby
+
+  enabled_merge_buttons:
+    merge: false
+    rebase: true
+    squash: true
+
+notifications:
+  commits: commits@aingle.apache.org
+  issues: issues@aingle.apache.org
+  # Send new/closed PR notifications to dev@
+  pullrequests_status: dev@aingle.apache.org
+  # Send individual PR comments/reviews to issues@
+  pullrequests_comment: issues@aingle.apache.org
+  jira_options: link label worklog

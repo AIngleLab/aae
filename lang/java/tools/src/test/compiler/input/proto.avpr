@@ -1,0 +1,12 @@
+{
+  "protocol": "Proto",
+  "namespace": "aingle.examples.baseball",
+  "doc" : "This is protocol",
+  "messages": {
+    "bar": {
+      "doc" : "method 'bar' does nothing */",
+      "request": [],
+      "response": "null"
+    }
+  }
+}

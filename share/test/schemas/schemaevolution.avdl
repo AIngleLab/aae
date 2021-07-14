@@ -1,0 +1,41 @@
+/**
+
+ */
+
+/**
+ * A few simple test schemas for testing schema evolution the IDL generated classes
+ */
+@namespace("org.apache.aingle.compiler.schema.evolve")
+protocol SchemaEvolveTesting {
+  record TestRecord1 {
+    string name;
+    long   value;
+  }
+
+  record TestRecord2 {
+    string name;
+    long   value;
+    string data;
+  }
+
+  record TestRecord3 {
+    string name;
+    string data;
+  }
+
+  record NestedEvolve1 {
+    string rootName;
+    TestRecord1 nested;
+  }
+
+  record NestedEvolve2 {
+    string rootName;
+    TestRecord2 nested;
+  }
+
+  record NestedEvolve3 {
+    string rootName;
+    TestRecord3 nested;
+  }
+
+}

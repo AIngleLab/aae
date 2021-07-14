@@ -1,0 +1,18 @@
+/**
+
+ */
+
+/**
+ * A test case to exercise the stringable feature on @java-class, @java-key-class and
+ * @java-element-class
+ */
+@namespace("test")
+protocol AnnotatedStringableTypes {
+
+  record StringablesRecord {
+    /** Each field exercises one of the java-class, key-class or element-class. */
+    @java-class("java.math.BigDecimal") string value;
+    @java-key-class("java.math.BigInteger") map<string> mapWithBigIntKeys;
+    map<@java-class("java.math.BigDecimal") string> mapWithBigDecimalElements;
+  }
+}

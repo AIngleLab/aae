@@ -1,0 +1,27 @@
+/**
+
+ */
+
+@namespace("org.apache.aingle.test.nullable")
+protocol Nullable {
+
+    enum MyEnum {
+        One,
+        Two
+    }
+
+    record SubRecord {
+        string value;
+    }
+
+    record RecordWithNullables {
+        union { null, string        } nullableString    = null;
+        union { null, long          } nullableLong      = null;
+        union { null, int           } nullableInt       = null;
+        union { null, map<string>   } nullableMap       = null;
+        union { null, array<string> } nullableArray     = null;
+        union { null, SubRecord     } nullableRecord    = null;
+        union { null, MyEnum        } nullableEnum      = null;
+    }
+
+}

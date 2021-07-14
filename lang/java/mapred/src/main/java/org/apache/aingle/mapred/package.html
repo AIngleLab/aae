@@ -1,0 +1,110 @@
+<html>
+
+<!--
+
+-->
+
+<body>
+Run <a href="https://hadoop.apache.org/">Hadoop</a> MapReduce jobs over
+AIngle data, with map and reduce functions written in Java.
+
+<p>AIngle data files do not contain key/value pairs as expected by
+  Hadoop's MapReduce API, but rather just a sequence of values.  Thus
+  we provide here a layer on top of Hadoop's MapReduce API.</p>
+
+<p>In all cases, input and output paths are set and jobs are submitted
+  as with standard Hadoop jobs:
+ <ul>
+   <li>Specify input files with {@link
+   org.apache.hadoop.mapred.FileInputFormat#setInputPaths}</li>
+   <li>Specify an output directory with {@link
+   org.apache.hadoop.mapred.FileOutputFormat#setOutputPath}</li>
+   <li>Run your job with {@link org.apache.hadoop.mapred.JobClient#runJob}</li>
+ </ul>
+</p>
+
+<p>For jobs whose input and output are AIngle data files:
+ <ul>
+   <li>Call {@link org.apache.aingle.mapred.AIngleJob#setInputSchema} and
+   {@link org.apache.aingle.mapred.AIngleJob#setOutputSchema} with your
+   job's input and output schemas.</li>
+   <li>Subclass {@link org.apache.aingle.mapred.AIngleMapper} and specify
+   this as your job's mapper with {@link
+   org.apache.aingle.mapred.AIngleJob#setMapperClass}</li>
+   <li>Subclass {@link org.apache.aingle.mapred.AIngleReducer} and specify
+   this as your job's reducer and perhaps combiner, with {@link
+   org.apache.aingle.mapred.AIngleJob#setReducerClass} and {@link
+   org.apache.aingle.mapred.AIngleJob#setCombinerClass}</li>
+ </ul>
+</p>
+
+<p>For jobs whose input is an AIngle data file and which use an {@link
+  org.apache.aingle.mapred.AIngleMapper}, but whose reducer is a non-AIngle
+  {@link org.apache.hadoop.mapred.Reducer} and whose output is a
+  non-AIngle format:
+ <ul>
+   <li>Call {@link org.apache.aingle.mapred.AIngleJob#setInputSchema} with your
+   job's input schema.</li>
+   <li>Subclass {@link org.apache.aingle.mapred.AIngleMapper} and specify
+   this as your job's mapper with {@link
+   org.apache.aingle.mapred.AIngleJob#setMapperClass}</li>
+   <li>Implement {@link org.apache.hadoop.mapred.Reducer} and specify
+   your job's reducer with {@link
+   org.apache.hadoop.mapred.JobConf#setReducerClass}.  The input key
+   and value types should be {@link org.apache.aingle.mapred.AIngleKey} and {@link
+   org.apache.aingle.mapred.AIngleValue}.</li>
+   <li>Optionally implement {@link org.apache.hadoop.mapred.Reducer} and
+   specify your job's combiner with {@link
+   org.apache.hadoop.mapred.JobConf#setCombinerClass}.  You will be unable to
+   re-use the same Reducer class as the Combiner, as the Combiner will need
+   input and output key to be {@link org.apache.aingle.mapred.AIngleKey}, and
+   input and output value to be {@link org.apache.aingle.mapred.AIngleValue}.</li>
+   <li>Specify your job's output key and value types {@link
+   org.apache.hadoop.mapred.JobConf#setOutputKeyClass} and {@link
+   org.apache.hadoop.mapred.JobConf#setOutputValueClass}.</li>
+   <li>Specify your job's output format {@link
+   org.apache.hadoop.mapred.JobConf#setOutputFormat}.</li>
+ </ul>
+</p>
+
+<p>For jobs whose input is non-AIngle data file and which use a
+  non-AIngle {@link org.apache.hadoop.mapred.Mapper}, but whose reducer
+  is an {@link org.apache.aingle.mapred.AIngleReducer} and whose output is
+  an AIngle data file:
+ <ul>
+   <li>Set your input file format with {@link
+   org.apache.hadoop.mapred.JobConf#setInputFormat}.</li>
+   <li>Implement {@link org.apache.hadoop.mapred.Mapper} and specify
+   your job's mapper with {@link
+   org.apache.hadoop.mapred.JobConf#setMapperClass}.  The output key
+   and value type should be {@link org.apache.aingle.mapred.AIngleKey} and
+   {@link org.apache.aingle.mapred.AIngleValue}.</li>
+   <li>Subclass {@link org.apache.aingle.mapred.AIngleReducer} and specify
+   this as your job's reducer and perhaps combiner, with {@link
+   org.apache.aingle.mapred.AIngleJob#setReducerClass} and {@link
+   org.apache.aingle.mapred.AIngleJob#setCombinerClass}</li>
+   <li>Call {@link org.apache.aingle.mapred.AIngleJob#setOutputSchema} with your
+   job's output schema.</li>
+ </ul>
+</p>
+
+<p>For jobs whose input is non-AIngle data file and which use a
+  non-AIngle {@link org.apache.hadoop.mapred.Mapper} and no reducer,
+  i.e., a <i>map-only</i> job:
+ <ul>
+   <li>Set your input file format with {@link
+   org.apache.hadoop.mapred.JobConf#setInputFormat}.</li>
+   <li>Implement {@link org.apache.hadoop.mapred.Mapper} and specify
+   your job's mapper with {@link
+   org.apache.hadoop.mapred.JobConf#setMapperClass}.  The output key
+   and value type should be {@link org.apache.aingle.mapred.AIngleWrapper} and
+   {@link org.apache.hadoop.io.NullWritable}.</li>
+   <li>Call {@link
+   org.apache.hadoop.mapred.JobConf#setNumReduceTasks(int)} with zero.
+   <li>Call {@link org.apache.aingle.mapred.AIngleJob#setOutputSchema} with your
+   job's output schema.</li>
+ </ul>
+</p>
+
+</body>
+</html>

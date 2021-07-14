@@ -1,0 +1,69 @@
+<!--
+
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../common.props" />
+  <Import Project="../../../versions.props" />
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp2.1</TargetFrameworks>
+    <AssemblyName>AIngle</AssemblyName>
+    <RootNamespace>AIngle</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\..\AIngle.snk</AssemblyOriginatorKeyFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CodeAnalysisRuleSet>..\..\..\AIngle.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <!-- NuGet Package Settings -->
+    <PackageId>Apache.AIngle</PackageId>
+    <Description>
+      AIngle provides:
+
+      Rich data structures.
+      A compact, fast, binary data format.
+      A container file, to store persistent data.
+      Remote procedure call (RPC).
+      Simple integration with dynamic languages. Code generation is not required to read or write data files nor to use or implement RPC protocols. Code generation as an optional optimization, only worth implementing for statically typed languages.
+    </Description>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\..\..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersVersion)">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+    
+  <!-- See lang/csharp/README.md for tool and library dependency update strategy -->
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonMinimumVersion)" />
+    <PackageReference Include="System.CodeDom" Version="$(SystemCodeDomMinimumVersion)" />
+    <PackageReference Include="System.Reflection" Version="$(SystemReflectionMinimumVersion)" />
+    <PackageReference Include="System.Reflection.Emit.ILGeneration" Version="$(SystemReflectionEmitILGenerationMinimumVersion)" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="$(SystemReflectionEmitLightweightMinimumVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Compile Remove="**/*.notnetstandard2.0.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <Compile Remove="**/*.netstandard2.0.cs" />
+  </ItemGroup>
+
+</Project>

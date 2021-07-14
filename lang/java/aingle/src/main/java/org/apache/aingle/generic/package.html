@@ -1,0 +1,30 @@
+<html>
+
+<!--
+
+-->
+
+<body>
+A generic representation for AIngle data.
+
+<p>This representation is best for applications which deal with
+  dynamic data, whose schemas are not known until runtime.
+
+<p>AIngle schemas are mapped to Java types as follows:
+<ul>
+<li>Schema records are implemented as {@link org.apache.aingle.generic.GenericRecord}.
+<li>Schema enums are implemented as {@link org.apache.aingle.generic.GenericEnumSymbol}.
+<li>Schema arrays are implemented as {@link java.util.Collection}.
+<li>Schema maps are implemented as {@link java.util.Map}.
+<li>Schema fixed are implemented as {@link org.apache.aingle.generic.GenericFixed}.
+<li>Schema strings are implemented as {@link java.lang.CharSequence}.
+<li>Schema bytes are implemented as {@link java.nio.ByteBuffer}.
+<li>Schema ints are implemented as {@link java.lang.Integer}.
+<li>Schema longs are implemented as {@link java.lang.Long}.
+<li>Schema floats are implemented as {@link java.lang.Float}.
+<li>Schema doubles are implemented as {@link java.lang.Double}.
+<li>Schema booleans are implemented as {@link java.lang.Boolean}.
+</ul>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+lib/aingle/VERSION.txt
+tmp
+data.avr
+Gemfile.lock
+.bundle/
+.gem/
+aingle.gemspec
+pkg/
+.ruby-version
+.ruby-gemset

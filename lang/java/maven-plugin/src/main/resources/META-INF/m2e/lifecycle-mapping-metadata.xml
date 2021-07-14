@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<lifecycleMappingMetadata>
+
+    <pluginExecutions>
+        <pluginExecution>
+            <pluginExecutionFilter>
+                <goals>
+                    <goal>protocol</goal>
+                    <goal>idl-protocol</goal>
+                    <goal>schema</goal>
+                </goals>
+            </pluginExecutionFilter>
+            <action>
+                <execute>
+                    <runOnConfiguration>true</runOnConfiguration>
+                    <runOnIncremental>false</runOnIncremental>
+                </execute>
+            </action>
+        </pluginExecution>
+    </pluginExecutions>
+
+</lifecycleMappingMetadata>

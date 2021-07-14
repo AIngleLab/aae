@@ -1,0 +1,7 @@
+Name: aingle-c
+Description: C library for parsing AIngle data
+Version: @VERSION@
+URL: https://apache.aingle.ai/
+Libs: -L@prefix@/lib -laingle
+Cflags: -I@prefix@/include
+Requires: @CODEC_PKG@

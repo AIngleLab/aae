@@ -1,0 +1,60 @@
+
+
+name: Rust Continuous Integration
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    paths:
+      - .github/workflows/test-lang-rust-ci.yml
+      - lang/rust/**
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust:
+          - stable
+          - beta
+          - nightly
+          - 1.48.0  # MSRV
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          override: true
+          components: rustfmt
+
+      - name: Rust Format
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+      - name: Rust Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --all-features --all-targets
+
+      - name: Rust Test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --all-features --all-targets
+
+      # because of https://github.com/rust-lang/cargo/issues/6669
+      - name: Rust Test docs
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --doc

@@ -1,0 +1,25 @@
+<html>
+
+<!--
+
+-->
+
+<body>Read and write <a href="https://apache.aingle.ai/">AIngle</a> data
+in Trevni column files.</body>
+
+<h2>Limitations</h2>
+
+The current implementation does not correctly handle all AIngle data.
+In particular:
+
+<ul>
+  <li>Recursive types are not supported.</li>
+  <li>With ReflectData, fields of Java type <b>byte</b>, <b>short</b>
+    and <b>char</b> are not supported.  Instead use int. </li>
+  <li>With ReflectData, Java arrays are not supported.  Instead use
+  List. </li>
+  <li>An <b>enum</b> is always read as a GenericData.EnumSymbol, even
+    when SpecificData or ReflectData are used. </li>
+</ul>
+
+</html>

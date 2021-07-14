@@ -1,0 +1,15 @@
+*.egg-info/
+.coverage*
+.eggs/
+.tox
+aingle/HandshakeRequest.ain
+aingle/HandshakeResponse.ain
+aingle/VERSION.txt
+aingle/interop.ain
+aingle/test/interop/
+aingle/tether/InputProtocol.avpr
+aingle/tether/OutputProtocol.avpr
+build/
+dist
+lib/
+userlogs/

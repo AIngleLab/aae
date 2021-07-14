@@ -1,0 +1,33 @@
+<html>
+
+<!--
+
+-->
+
+<body><a href="https://thrift.apache.org/">Thrift</a> compatibility.
+
+<p>Thrift primitive types are mapped to AIngle schemas as follows:</p>
+<table>
+<tr><th>Thrift type</th><th>AIngle schema</th></tr>
+<tr><td>bool</td><td>"boolean"</td></tr>
+<tr><td>byte</td><td>{"type": "int", "thrift": "byte"}</td></tr>
+<tr><td>i16</td><td>{"type": "int", "thrift": "short"}</td></tr>
+<tr><td>i32</td><td>"int"</td></tr>
+<tr><td>i64</td><td>"long"</td></tr>
+<tr><td>double</td><td>"double"</td></tr>
+<tr><td>string</td><td>"string"</td></tr>
+<tr><td>binary</td><td>"bytes"</td></tr>
+</table>
+
+<p>Thrift complex types are mapped to AIngle complex types as follows:</p>
+<table>
+<tr><th>Thrift</th><th>AIngle</th></tr>
+<tr><td>struct</td><td>record</td></tr>
+<tr><td>enum</td><td>enum</td></tr>
+<tr><td>list</td><td>array</td></tr>
+<tr><td>set</td><td>array <em>(Note: "thrift":"set" is added to schema.)</em></td></tr>
+<tr><td>map</td><td>map <em>(Note: only string keys are permitted.)</em></td></tr>
+</table>
+
+</body>
+</html>

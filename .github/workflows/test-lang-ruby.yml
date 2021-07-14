@@ -1,0 +1,123 @@
+
+
+name: 'Test Ruby'
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    paths:
+    - .github/workflows/test-lang-ruby.yml
+    - lang/ruby/**
+
+defaults:
+  run:
+    working-directory: lang/ruby
+
+jobs:
+  test:
+    name: Ruby ${{ matrix.ruby }} Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+        - '2.6'
+        - '2.7'
+        - '3.0'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Install Dependencies
+        run: sudo apt-get install -qqy bundler libsnappy-dev
+
+      - uses: actions/cache@v2
+        with:
+          path: .gem
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Configure Bundler to Use Cache
+        run: bundle config path .gem
+
+      - name: Lint
+        run: |
+          PATH=$PWD/.gem/bin:$PATH
+          ./build.sh lint
+
+      - name: Test
+        run: |
+          PATH=$PWD/.gem/bin:$PATH
+          ./build.sh test
+
+  interop:
+    name: Ruby ${{ matrix.ruby }} Interop
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby:
+        - '2.6'
+        - '2.7'
+        - '3.0'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Install Dependencies
+        run: sudo apt-get install -qqy bundler libsnappy-dev
+
+      - uses: actions/cache@v2
+        with:
+          path: .gem
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Configure Bundler to Use Cache
+        run: bundle config path .gem
+
+      - name: Cache Local Maven Repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Java AIngle for Interop Test
+        working-directory: .
+        run: mvn -B install -DskipTests
+
+      - name: Create Interop Data Directory
+        working-directory: .
+        run: mkdir -p build/interop/data
+
+      - name: Generate Interop Resources
+        working-directory: lang/java/aingle
+        run: mvn -B -P interop-data-generate generate-resources
+
+      - name: Bundle Install
+        run: |
+          export GEM_HOME="$PWD/.gem/"
+          export PATH="$GEM_HOME/bin:$PATH"
+          bundle install
+
+      - name: Generate Interop Data
+        run: |
+          export GEM_HOME="$PWD/.gem/"
+          export PATH="$GEM_HOME/bin:$PATH"
+          bundle exec rake --trace generate_interop
+
+      - name: Run Interop Tests
+        run: |
+          export GEM_HOME="$PWD/.gem/"
+          export PATH="$GEM_HOME/bin:$PATH"
+          bundle exec rake --trace interop

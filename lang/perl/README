@@ -1,0 +1,30 @@
+NAME
+    AIngle - the official Perl API for the Apache AIngle project's serialization
+    and RPC framework
+
+SYNOPSIS
+      use AIngle;
+
+DESCRIPTION
+    Apache AIngle <https://apache.aingle.ai/> is a data serialization system
+    providing rich data structures and a compact, fast, binary data form.
+
+AUTHOR
+    Apache AIngle <dev@aingle.apache.org>
+
+HISTORY
+    Before contribution to the Apache AIngle project, this module was
+    developed by Yann Kerhervé <yannk@cpank.org> with contributions from
+    Andy Grundman <andy@hybridized.org>, David Bushong
+    <dbushong@mashlogic.com>, and Ilya Martynov <ilya@iponweb.net>.
+
+COPYRIGHT
+    Copyright 2014 Apache Software Foundation.
+
+    Apache and Apache AIngle are trademarks of the Apache Software Foundation.
+
+LICENSE
+    The Apache License, Version 2.0
+    <>
+
+SEE ALSO

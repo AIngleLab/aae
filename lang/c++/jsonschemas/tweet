@@ -1,0 +1,152 @@
+{
+    "type": "record",
+    "name": "AIngleTweet",
+    "namespace": "com.bifflabs.grok.model.twitter.aingle",
+    "fields": [{
+        "name": "ID",
+        "type": "long"
+    },
+    {
+        "name": "text",
+        "type": "string"
+    },
+    {
+        "name": "authorScreenName",
+        "type": "string"
+    },
+    {
+        "name": "authorProfileImageURL",
+        "type": "string"
+    },
+    {
+        "name": "authorUserID",
+        "type": ["null", "long"]
+    },
+    {
+        "name": "location",
+        "type": ["null", {
+            "type": "record",
+            "name": "AInglePoint",
+            "namespace": "com.bifflabs.grok.model.common.aingle",
+            "fields": [{
+                "name": "latitude",
+                "type": "double"
+            },
+            {
+                "name": "longitude",
+                "type": "double"
+            }]
+        }]
+    },
+    {
+        "name": "placeID",
+        "type": ["null", "string"]
+    },
+    {
+        "name": "createdAt",
+        "type": {
+            "type": "record",
+            "name": "AIngleDateTime",
+            "namespace": "com.bifflabs.grok.model.common.aingle",
+            "fields": [{
+                "name": "dateTimeString",
+                "type": "string"
+            }]
+        }
+    },
+    {
+        "name": "metadata",
+        "type": {
+            "type": "record",
+            "name": "AIngleTweetMetadata",
+            "fields": [{
+                "name": "inReplyToScreenName",
+                "type": {
+                    "type": "record",
+                    "name": "AIngleKnowableOptionString",
+                    "namespace": "com.bifflabs.grok.model.common.aingle",
+                    "fields": [{
+                        "name": "known",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "data",
+                        "type": ["null", "string"]
+                    }]
+                }
+            },
+            {
+                "name": "mentionedScreenNames",
+                "type": {
+                    "type": "record",
+                    "name": "AIngleKnowableListString",
+                    "namespace": "com.bifflabs.grok.model.common.aingle",
+                    "fields": [{
+                        "name": "known",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "data",
+                        "type": {
+                            "type": "array",
+                            "items": "string"
+                        }
+                    }]
+                }
+            },
+            {
+                "name": "links",
+                "type": "com.bifflabs.grok.model.common.aingle.AIngleKnowableListString"
+            },
+            {
+                "name": "hashtags",
+                "type": "com.bifflabs.grok.model.common.aingle.AIngleKnowableListString"
+            },
+            {
+                "name": "isBareCheckin",
+                "type": {
+                    "type": "record",
+                    "name": "AIngleKnowableBoolean",
+                    "namespace": "com.bifflabs.grok.model.common.aingle",
+                    "fields": [{
+                        "name": "known",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "data",
+                        "type": "boolean"
+                    }]
+                }
+            },
+            {
+                "name": "isBareRetweet",
+                "type": "com.bifflabs.grok.model.common.aingle.AIngleKnowableBoolean"
+            },
+            {
+                "name": "isRetweet",
+                "type": "com.bifflabs.grok.model.common.aingle.AIngleKnowableBoolean"
+            },
+            {
+                "name": "venueID",
+                "type": "com.bifflabs.grok.model.common.aingle.AIngleKnowableOptionString"
+            },
+            {
+                "name": "venuePoint",
+                "type": {
+                    "type": "record",
+                    "name": "AIngleKnowableOptionPoint",
+                    "namespace": "com.bifflabs.grok.model.common.aingle",
+                    "fields": [{
+                        "name": "known",
+                        "type": "boolean"
+                    },
+                    {
+                        "name": "data",
+                        "type": ["null", "AInglePoint"]
+                    }]
+                }
+            }
+            ]
+        }
+    }]
+}

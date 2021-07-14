@@ -1,0 +1,27 @@
+/**
+
+ */
+
+@version("1.0.5")
+@namespace("org.apache.aingle.ipc.specific")
+protocol Contexts {
+  record HomePage {
+  }
+  
+  record ProductPage {
+    string product;
+  }
+
+  record CartPage {
+    array<string> productsInCart;
+  }
+
+  record UnknownPage {
+  }
+
+  record PageView {
+    long datetime;
+    union {UnknownPage, HomePage, ProductPage, CartPage} pageContext;
+  }
+
+} 

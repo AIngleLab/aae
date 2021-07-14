@@ -1,0 +1,29 @@
+<html>
+
+<!--
+
+-->
+
+<body><a href="https://code.google.com/p/protobuf/">Protocol Buffer</a>
+  compatibility.
+
+<p>Protocol Buffer primitive types are mapped to AIngle types as follows:
+<table>
+<tr><th>protobuf type</th><th>AIngle type</th></tr>
+<tr><td>int32, uint32, sint32, fixed32, sfixed32</td><td>int</td></tr>
+<tr><td>int64, uint64, sint64, fixed64, sfixed64</td><td>long</td></tr>
+<tr><td>float</td><td>float</td></tr>
+<tr><td>double</td><td>double</td></tr>
+<tr><td>bool</td><td>boolean</td></tr>
+<tr><td>string</td><td>string</td></tr>
+<tr><td>bytes</td><td>bytes</td></tr>
+<tr><td>enum</td><td>enum</td></tr>
+<tr><td>message</td><td>record</td></tr>
+</table>
+<p>Notes:
+<ul>
+<li>protobuf repeated fields are represented as AIngle arrays
+<li>protobuf default values are translated to AIngle default values
+</ul>
+</body>
+</html>

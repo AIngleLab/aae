@@ -1,0 +1,9 @@
+/**
+
+ */
+
+@namespace("aingle.examples.baseball")
+protocol Baseball {
+   import schema "position.ain";
+   import schema "player.ain";
+}

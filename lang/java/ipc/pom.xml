@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+  xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>aingle-parent</artifactId>
+    <groupId>org.apache.aingle</groupId>
+    <version>1.11.0-SNAPSHOT</version>
+    <relativePath>../</relativePath>
+  </parent>
+
+  <artifactId>aingle-ipc</artifactId>
+
+  <name>Apache AIngle IPC</name>
+  <url>https://apache.aingle.ai</url>
+  <description>AIngle inter-process communication components</description>
+  <packaging>bundle</packaging>
+
+  <properties>
+    <main.basedir>${project.parent.parent.basedir}</main.basedir>
+    <osgi.import>
+      !org.apache.aingle.ipc*,
+      org.apache.aingle*;version="${project.version}",
+      javax.servlet*;resolution:=optional,
+      org.apache.velocity*;resolution:=optional,
+      *
+    </osgi.import>
+    <osgi.export>org.apache.aingle.ipc*;version="${project.version}"</osgi.export>
+    <osgi.dynamic.import>org.apache.aingle.ipc.jetty,org.apache.aingle.ipc.netty</osgi.dynamic.import>
+  </properties>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/velocity</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <!-- some tests hang if not run in a separate JVM -->
+          <forkCount>1</forkCount>
+          <reuseForks>false</reuseForks>
+           <parallel>none</parallel>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>aingle-maven-plugin</artifactId>
+        <version>${project.version}</version>
+        <executions>
+          <execution>
+            <id>schemas</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>schema</goal>
+              <goal>protocol</goal>
+              <goal>idl-protocol</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>**/mapred/tether/**</exclude>
+                <exclude>org/apache/aingle/data/Json.ain</exclude>
+              </excludes>
+              <stringType>String</stringType>
+              <createOptionalGetters>true</createOptionalGetters>
+              <!--<gettersReturnOptional>true</gettersReturnOptional>-->
+              <sourceDirectory>${parent.project.basedir}/../../../../share/schemas/</sourceDirectory>
+              <outputDirectory>${project.build.directory}/generated-sources/java</outputDirectory>
+              <testSourceDirectory>${parent.project.basedir}/../../../../share/test/schemas/</testSourceDirectory>
+              <testOutputDirectory>${project.build.directory}/generated-test-sources/java</testOutputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>org.apache.aingle.ipc</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-test-source</id>
+            <phase>generate-test-sources</phase>
+            <goals>
+              <goal>add-test-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/target/generated-test-sources/java</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.basedir}/target/generated-sources/java</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>aingle</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>aingle</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>aingle-compiler</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.velocity</groupId>
+      <artifactId>velocity-engine-core</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <scope>provided</scope>
+    </dependency>
+    <!-- javax.annotation-api dependency must be explicit for forward compatibility (Java > 9) -->
+    <dependency>
+      <groupId>javax.annotation</groupId>
+      <artifactId>javax.annotation-api</artifactId>
+      <version>1.3.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.xerial.snappy</groupId>
+      <artifactId>snappy-java</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.tukaani</groupId>
+      <artifactId>xz</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.github.luben</groupId>
+      <artifactId>zstd-jni</artifactId>
+    </dependency>
+
+  </dependencies>
+
+</project>

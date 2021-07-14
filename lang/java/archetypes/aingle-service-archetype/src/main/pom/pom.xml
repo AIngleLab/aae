@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.apache</groupId>
+    <artifactId>apache</artifactId>
+    <version>23</version>
+  </parent>
+
+  <groupId>\${groupId}</groupId>
+  <artifactId>\${artifactId}</artifactId>
+  <version>\${version}</version>
+  <packaging>jar</packaging>
+
+  <name>Simple AIngle Ordering Service</name>
+
+  <properties>
+    <aingle.version>${project.version}</aingle.version>
+    <jackson.version>${jackson.version}</jackson.version>
+    <junit.version>${junit.version}</junit.version>
+    <logback.version>1.2.3</logback.version>
+    <slf4j.version>${slf4j.version}</slf4j.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.aingle</groupId>
+      <artifactId>aingle</artifactId>
+      <version>\${aingle.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.aingle</groupId>
+      <artifactId>aingle-ipc</artifactId>
+      <version>\${aingle.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.aingle</groupId>
+      <artifactId>aingle-ipc-netty</artifactId>
+      <version>\${aingle.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>\${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>\${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>\${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>\${logback.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>\${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <defaultGoal>install</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.aingle</groupId>
+        <artifactId>aingle-maven-plugin</artifactId>
+        <version>\${aingle.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <!-- By default generates classes from all Protocol (.avpr) files found in 'src/main/aingle' -->
+              <goal>protocol</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.aingle</groupId>
+            <artifactId>aingle-ipc</artifactId>
+            <version>\${aingle.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>%regex[.*.integration.*]</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+            <configuration>
+              <includes>
+                <include>%regex[.*.integration.*]</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

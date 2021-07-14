@@ -1,0 +1,52 @@
+/**
+
+ */
+
+/** NOTE: This structure was inspired by HTTP and deliberately skewed to get the effects that needed testing */
+
+@namespace("org.apache.aingle.test.http")
+protocol Http {
+
+    enum NetworkType {
+        IPv4,
+        IPv6
+    }
+
+    record NetworkConnection {
+        NetworkType networkType;
+        string      networkAddress;
+    }
+
+    record UserAgent {
+        union { null, string } id = null;
+        string                      useragent;
+    }
+
+    enum HttpMethod {
+        GET,
+        POST
+    }
+
+    record QueryParameter {
+        string                  name;
+        union { null, string }  value; // Sometimes there is no value.
+    }
+
+    record HttpURI {
+        HttpMethod method;
+        string                path;
+        array<QueryParameter> parameters = [];
+    }
+
+    record HttpRequest {
+        UserAgent         userAgent;
+        HttpURI    URI;
+    }
+
+    record Request {
+      long              timestamp;
+      union { null, NetworkConnection } connection = null;
+      HttpRequest       httpRequest;
+    }
+
+}

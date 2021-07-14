@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+
+source 'https://rubygems.org'
+gem 'rake'
+gem 'echoe'
+gem 'multi_json'
+gem 'snappy'
+gem 'zstd-ruby'
+gem 'test-unit'
+gem 'parallel'
+# webrick is no longer included with Ruby 3.0+
+gem 'webrick'
+
+gem 'memory_profiler'
+
+# next major version will enable new cops
+gem 'rubocop', '~> 1.15'
+gem 'rdoc'

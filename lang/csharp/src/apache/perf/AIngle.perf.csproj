@@ -1,0 +1,26 @@
+<!--
+
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks Condition="'$(OS)'!='Windows_NT'">net5.0</TargetFrameworks>
+    <TargetFrameworks Condition="'$(OS)'=='Windows_NT'">net461;net5.0</TargetFrameworks>
+    <AssemblyName>AIngle.perf</AssemblyName>
+    <RootNamespace>AIngle.perf</RootNamespace>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <!-- Suppress error NU5104: A stable release of a package should not have a prerelease dependency, if AIngle.main is a prerelease version -->
+    <NoWarn>$(NoWarn);NU5104</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\main\AIngle.main.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,325 @@
+/*
+
+ */
+
+/*!
+\mainpage
+
+<h2 id="Introduction">Introduction to AIngle C++ <a href="#Introduction">§</a></h2>
+
+<p>AIngle is a data serialization system. See
+<a href="https://apache.aingle.ai/docs/current/">https://apache.aingle.ai/docs/current/</a>
+for background information.</p>
+<p>AIngle C++ is a C++ library which implements parts of the <a href="https://apache.aingle.ai/docs/current/spec.html"> AIngle Specification</a>. The library includes the following functionality:</p>
+<ul>
+    <li>Assembling schemas programmatically.
+    <li>A schema parser, which can parse AIngle schema (written in JSON) into a Schema object.
+    <li>Encoders and decoders to encode data into AIngle format and decode it back using primitive functions. There are multiple implementations of encoders and decoders.
+    <ul>
+        <li>A binary encoder, which encodes into binary AIngle data.
+        <li>A JSON encoder, which encodes into JSON AIngle data.
+        <li>A validating encoder, an encoder proxy, which validates the call sequence to the encoder before sending the calls to another encoder.
+        <li>A binary decoder, which decodes binary AIngle data.
+        <li>A JSON decoder, which decodes JSON AIngle data.
+        <li>A validating decoder, a decoder proxy, which validates the call sequence to the decoder before sending the calls to another decoder.
+        <li>A resolving decoder, which accepts calls for according to a reader's schema but decodes data corresponding to a different (writer's) schema doing schema resolution according to resolution rules in the AIngle specification.
+    </ul>
+    <li>Streams for storing and reading data, which Encoders and Decoders use.
+    <li>Support for AIngle DataFile.
+    <li>A code generator, which generates C++ classes and functions to encode and decode them. The code generator produces a C++ header file from a given schema file.
+</ul>
+Presently there is no support for the following specified in AIngle specification.
+<ul>
+    <li>AIngle RPC
+</ul>
+
+<b>Note:</b> Prior to AIngle release 1.5, some of the functionality mentioned above was available through a somewhat different API and set tools. They are partially incompatible to the present ones. They continue to be available but will be deprecated and discontinued sometime in the future. The documentation on that API can be found at <a href="https://apache.aingle.ai/docs/1.4.0/api/cpp/html/index.html">https://apache.aingle.ai/docs/1.4.0/api/cpp/html/index.html</a>
+
+<h2 id="Installing">Installing AIngle C++ <a href="#Installing">§</a></h2>
+<h3>Supported platforms and pre-requisites</h3>
+One should be able to build AIngle C++ on (1) any UNIX flavor including cygwin for Windows and (2) natively on Windows using Visual Studio. We have tested it on (1) Linux systems (Ubuntu and RHEL) and Cygwin and Visual Studio 2010 Express edition.
+
+In order to build AIngle C++, one needs the following:
+<ul>
+    <li>A C++ compiler and runtime libraries.
+    <li>Boost library version 1.38 or later. Apart from the header-only libraries of Boost, AIngle C++ requires filesystem, iostreams, system and program_options libraries. Please see <a href="https://www.boost.org/">https://www.boost.org</a> or your platform's documentation for details on how to set up Boost for your platform.
+    <li>CMake build tool version 2.6 or later. Please see <a href="https://www.cmake.org">https://www.cmake.org</a> or your platform's documentation for details on how to set up CMake for your system.
+    <li>Python. If not already present, please consult your platform-specific documentation on how to install Python on your system.
+</ul>
+
+For Ubuntu Linux, for example, you can have these by doing
+<tt>apt-get install</tt> for the following packages:
+\ul
+\li cmake
+\li g++
+\li libboost-dev
+\li libboost-filesystem-dev
+\li libboost-iostreams-dev
+\li libboost-program-options-dev
+\li libboost-system-dev
+
+For Windows native builds, you need to install the following:
+\ul
+\li cmake
+\li boost distribution from Boost consulting
+\li Visual studio
+
+<h3>Installing AIngle C++</h3>
+<ol>
+    <li>Download the latest AIngle distribution. AIngle distribution is a compressed tarball.
+Please see the main documentation if you want to build anything more than AIngle C++.
+</ol>
+
+<h4>On Unix systems and on Cygwin</h4>
+<ol>
+    <li>Expand the tarball into a directory.
+    <li>Change to <tt>lang/c++</tt> subdirectory.
+    <li>Type <tt>./build.sh test</tt>. This builds AIngle C++ and runs tests on it.
+    <li>Type <tt>./build.sh install</tt>. This installs AIngle C++ under /usr/local on your system.
+</ol>
+
+<h4>On native Windows</h4>
+<ol>
+    <li>Ensure that CMake's bin directory and Boost's lib directory are in the path.
+    <li>Expand the tarball into a directory.
+    <li>Change to <tt>lang/c++</tt> subdirectory.
+    <li>Create a subdirectory, say, build.win, and change to that directory.
+    <li>Type <tt>cmake -G "Visual Studio 10"</tt>. It creates, among other things, AIngle-cpp.sln file.
+    <li>Open the solution file using Visual Studio and build the projects from within the Visual Studio.
+    <li>To run all unit tests, build the special project named "RUN_TESTS".
+    <li>After building all the projects, you can also execute the unit tests from command line. <tt>ctest -C release</tt> or <tt>ctest -C debug</tt>.
+
+</ol>
+
+<h2 id="GettingStarted">Getting started with AIngle C++ <a href="#GettingStarted">§</a></h2>
+
+<p>Although AIngle does not require use of code generation, that is the easiest
+way to get started with the AIngle C++ library.
+The code generator reads a schema, and generates a C++
+header file that defines one or more C++ <tt>struct</tt>s to represent
+the data for the schema and functions to encode and decode those
+<tt>struct</tt>s. Even if you wish to write custom code to encode and decode
+your objects using the core functionality of AIngle C++, the generated code
+can serve as an example of how to use the code functionality.
+
+<p>
+Let's walk through an example, using a simple schema. Use the
+schema that represents an complex number:</p>
+
+<b>File: cpx.json</b>
+
+\includelineno cpx.json
+<p>
+<b>Note:</b> All the example code given here can be found under
+<tt>examples</tt> directory of the distribution.
+
+<p>
+Assume this JSON representation of the schema is stored in a file
+called <tt>cpx.json</tt>. To generate the code issue the command:.
+<pre>
+ainglegencpp -i cpx.json -o cpx.hh -n c
+</pre>
+The <tt>-i</tt> flag specifies the input schema file and <tt>-o</tt> flag
+specifies the output header file to generate. The generated C++ code will be
+in the namespace specified with <tt>-n</tt> flag.
+
+<p>
+The generated file, among other things will have the following:
+
+<pre>
+
+...
+namespace c {
+...
+
+struct cpx {
+    double re;
+    double im;
+};
+
+
+...
+
+}
+
+</pre>
+<tt>cpx</tt> is a C++ representation of the AIngle schema <tt>cpx</tt>.
+
+Now let's see how we can use the code generated to encode data into aingle and decode it back.
+
+<b>File: generated.cc</b>
+
+\includelineno generated.cc
+
+In line 27, we construct a memory output stream. By this we indicate that we
+want to send the encoded AIngle data into memory. In line 28, we construct a
+binary encoder, whereby we mean the output should be encoded using the AIngle
+binary standard. In line 29, we attach the output stream to the encoder. At any given time an encoder can write to only one output stream.
+<p>
+In line 32, we write the contents of c1 into the output stream using the
+encoder. Now the output stream contains the binary representation of
+the object. The rest of the code verifies that the data is indeed in the stream.
+<p>
+In line 35, we construct a memory input stream from the contents of the
+output stream. Thus the input stream has the binary representation of the
+object. In line 36 and 37, we construct a binary decoder and attach the
+input stream to it. Line 40 decodes the contents of the stream into another
+object c2. Now c1 and c2 should have identical contents, which one can readily
+verify from the output of the program, which should be:
+
+<pre>
+(1, 2.13)
+</pre>
+
+Now, if you want to encode the data using AIngle JSON encoding, you should use
+aingle::jsonEncoder() instead of aingle::binaryEncoder() in line 28
+and aingle::jsonDecoder() instead of aingle::binaryDecoder() in line 36.
+<p>
+
+On the other hand, if you want to write the contents to a file instead of
+memory, you should use aingle::fileOutputStream() instead of
+aingle::memoryOutputStream() in line 27 and aingle::fileInputStream()
+instead of aingle::memoryInputStream() in line 35.
+<p>
+
+<h2 id="ReadingJsonSchema"><a id="ReadingJsonSchema">Reading a JSON schema </a><a href="index.html#ReadingJsonSchema">§</a></h2>
+
+<p>The section above demonstrated pretty much all that's needed to
+know to get started reading and writing objects using the AIngle C++
+code generator. The following sections will cover some more
+information.</p>
+<p>The library provides some utilities to read a schema that is
+stored in a JSON file:</p>
+
+<b>File: schemaload.cc</b>
+
+\includelineno schemaload.cc
+
+<p>
+This reads the file, and parses the JSON schema into an in-memory schema
+object of type aingle::ValidSchema. If, for some reason, the schema is not valid,
+the <tt>cpxSchema</tt> object will not be set, and an exception will be
+thrown.
+</p>
+If you always use code AIngle generator you don't really need the in-memory
+schema objects. But if you use custom objects and routines to encode or decode
+aingle data, you will need the schema objects. Other uses of schema objects
+are generic data objects and schema resolution described in the following
+sections.
+
+<h2 id="CustomEncodingDecoding">Custom encoding and decoding <a href="#CustomEncodingDecoding">§</a></h2>
+
+Suppose you want to encode objects of type std::complex<double> from
+C++ standard library using the schema defined in cpx.json.
+Since std::complex<double> was not generated by AIngle, it doesn't know how to encode or decode objects of that
+type. You have to tell AIngle how to do that.
+
+The recommended way to tell AIngle how to encode or decode is to specialize
+AIngle's codec_traits template. For std::complex<double>, here is what you'd do:
+
+<b>File: custom.cc</b>
+
+\includelineno custom.cc
+
+Please notice that the main function is pretty much similar to that we used
+for the generated class. Once <tt>codec_traits</tt> for a specific type is
+supplied, you do not really need to do anything special for your custom types.
+
+<p>
+
+But wait, how does AIngle know that complex<double> represents the data for
+the schema in <tt>cpx.json</tt>? It doesn't. In fact, if you have used
+<tt>std::complex<float></tt> instead of <tt>std::complex<double></tt> program
+would have worked. But the data in the memory would not have been corresponding
+to the schema in <tt>cpx.json</tt>.
+
+<p>
+
+In order to ensure that you indeed use the correct type, you can use
+the validating encoders and decoder. Here is how:
+
+<b>File: validating.cc</b>
+
+\includelineno validating.cc
+
+Here, instead of using the plain binary encoder, you use a validating encoder
+backed by a binary encoder. Similarly, instead of using the plain binary
+decoder, you use a validating decoder backed by a binary decoder. Now,
+if you use <tt>std::complex<float></tt> instead of <tt>std::complex<double></tt>
+the validating encoder and decoder will throw exception stating that
+you are trying to encode or decode <tt>float</tt> instead of <tt>double</tt>.
+<p>
+You can use any encoder behind the validating encoder and any decoder
+behind the validating decoder. But in practice, only the binary encoder
+and the binary decoder have no knowledge of the underlying schema.
+All other encoders (JSON encoder) and decoders (JSON decoder,
+resolving decoder) do know about the schema and they validate internally. So,
+fronting them with a validating encoder or validating decoder is wasteful.
+
+<h2 id="GenericDataObjects">Generic data objects <a href="#GenericDataObjects">§</a></h2>
+
+A third way to encode and decode data is to use AIngle's generic datum.
+AIngle's generic datum allows you to read any arbitrary data corresponding to
+an arbitrary schema into a generic object. One need not know anything
+about the schema or data at compile time.
+
+Here is an example how one can use the generic datum.
+
+<b>File: generic.cc</b>
+
+\includelineno generic.cc
+
+In this example, we encode the data using generated code and decode it with
+generic datum. Then we examine the contents of the generic datum and extract
+them. Please see \ref aingle::GenericDatum for more details on how to use it.
+
+<h2 id="ReadingDifferentSchema">Reading data with a schema different from that of the writer <a href="#ReadingDifferentSchema">§</a></h2>
+It is possible to read the data written according to one schema
+using a different schema, provided the reader's schema and the writer's
+schema are compatible according to the AIngle's Schema resolution rules.
+<p>
+For example, you have a reader which is interested only in the imaginary part
+of a complex number while the writer writes both the real and imaginary parts.
+It is possible to do automatic schema resolution between the writer's schema
+and schema as shown below.
+
+<b>File: imaginary.json</b>
+
+\includelineno imaginary.json
+
+<pre>
+ainglegencpp -i imaginary.json -o imaginary.hh -n i
+</pre>
+
+<b>File: resolving.cc</b>
+
+\includelineno resolving.cc
+
+In this example, writer and reader deal with different schemas,
+both have a record with the name 'cpx'. The writer schema has two fields and
+the reader's has just one. We generated code for writer's schema in a namespace
+<tt>c</tt> and the reader's in <tt>i</tt>.
+
+<p>
+Please notice how the reading part of the example at line 60 reads as if
+the stream contains the data corresponding to its schema. The schema resolution
+is automatically done by the resolving decoder.
+
+<p>
+In this example, we have used a simple (somewhat artificial) projection (where the set of fields in
+the reader's schema is a subset of set of fields in the writer's). But more
+complex resolutions are allowed by AIngle specification.
+
+<h2 id="UsingAIngleDataFiles">Using AIngle data files <a href="#UsingAIngleDataFiles">§</a></h2>
+AIngle specification specifies a format for data files. AIngle C++ implements
+the specification. The code below demonstrates how one can use the
+AIngle data file to store and retrieve a collection of objects
+corresponding to a given schema.
+
+<b>File: datafile.cc</b>
+
+\includelineno datafile.cc
+
+Please see DataFile.hh for more details.
+*/
+

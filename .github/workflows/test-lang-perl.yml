@@ -1,0 +1,121 @@
+
+
+name: 'Test Perl'
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    paths:
+    - .github/workflows/test-lang-perl.yml
+    - lang/perl/**
+
+defaults:
+  run:
+    working-directory: lang/perl
+
+jobs:
+  test:
+    name: Perl ${{ matrix.perl }} Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl:
+        - '5.32'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get -qqy install --no-install-recommends libjansson-dev \
+                                                            libcompress-raw-zlib-perl \
+                                                            libcpan-uploader-perl \
+                                                            libencode-perl \
+                                                            libio-string-perl \
+                                                            libjson-xs-perl \
+                                                            libmodule-install-perl \
+                                                            libmodule-install-readmefrompod-perl \
+                                                            libobject-tiny-perl \
+                                                            libperl-critic-perl \
+                                                            libsnappy-dev \
+                                                            libtest-exception-perl \
+                                                            libtest-pod-perl
+          cpanm --mirror https://www.cpan.org/ install Compress::Zstd \
+                                                       Error::Simple \
+                                                       Module::Install::Repository \
+                                                       Regexp::Common \
+                                                       Try::Tiny \
+                                                       inc::Module::Install
+
+      - name: Lint
+        run: ./build.sh lint
+
+      - name: Test
+        run: ./build.sh test
+
+  interop:
+    name: Perl ${{ matrix.perl }} Interop
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        perl:
+        - '5.32'
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get -qqy install --no-install-recommends libcompress-raw-zlib-perl \
+                                                            libcpan-uploader-perl \
+                                                            libencode-perl \
+                                                            libio-string-perl \
+                                                            libjansson-dev \
+                                                            libjson-xs-perl \
+                                                            libmodule-install-perl \
+                                                            libmodule-install-readmefrompod-perl \
+                                                            libobject-tiny-perl \
+                                                            libsnappy-dev \
+                                                            libtest-exception-perl \
+                                                            libtest-pod-perl
+          cpanm --mirror https://www.cpan.org/ install Compress::Zstd \
+                                                       Error::Simple \
+                                                       Module::Install::Repository \
+                                                       Object::Tiny \
+                                                       Regexp::Common \
+                                                       Try::Tiny \
+                                                       inc::Module::Install
+
+      - name: Cache Local Maven Repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Install Java AIngle for Interop Test
+        working-directory: .
+        run: mvn -B install -DskipTests
+
+      - name: Create Interop Data Directory
+        working-directory: .
+        run: mkdir -p build/interop/data
+
+      - name: Generate Interop Resources
+        working-directory: lang/java/aingle
+        run: mvn -B -P interop-data-generate generate-resources
+
+      - name: Generate Interop Data
+        run: ./build.sh interop-data-generate
+
+      - name: Run Interop Tests
+        run: ./build.sh interop-data-test

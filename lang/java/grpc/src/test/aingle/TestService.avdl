@@ -1,0 +1,40 @@
+/**
+
+ */
+
+/** An example protocol in AIngle IDL */
+@namespace("org.apache.aingle.grpc.test")
+protocol TestService {
+
+  enum Kind {
+    FOO,
+    BAR,
+    BAZ
+  }
+
+  fixed MD5(4);
+
+  record TestRecord {
+    @order("ignore")
+    string name;
+
+    @order("descending")
+    Kind kind;
+
+    MD5 hash;
+
+    union { MD5, null} @aliases(["hash"]) nullableHash;
+
+    array<long> arrayOfLongs;
+  }
+
+  error TestError {
+    string message;
+  }
+
+  TestRecord echo(TestRecord `record`);
+  int add(int arg1, int arg2, int arg3);
+  void `error`(boolean declared) throws TestError;
+  void ping() oneway;
+  union {null, string} concatenate(string val1, boolean val2, long val3, int val4);
+}

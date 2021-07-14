@@ -1,0 +1,60 @@
+/**
+
+ */
+
+/**
+ * Genaingle format for a particular protocol found in Hadoop MapReduce.
+ * Used as a test case/example to show that we can express real-world stuff more
+ * succinctly.
+ */
+@namespace("org.apache.hadoop.mapreduce.jobhistory")
+protocol Events {
+  record JhCounter {
+    string name;
+    string displayName;
+    long value;
+  }
+
+  record JhCounterGroup {
+    string name;
+    string displayName;
+    array<JhCounter> counts;
+  }
+
+  record JhCounters {
+    string name;
+    array<JhCounterGroup> groups;
+  }
+
+  record JobFinished {
+    string jobid;
+    timestamp_ms finishTime;
+    decimal(9,2) finishRatio;
+    int finishedMaps;
+    int finishedReduces;
+    int failedMaps;
+    int failedReduces;
+    JhCounters totalCounters;
+    JhCounters mapCounters;
+    JhCounters reduceCounters;
+  }
+
+  record JobInited {
+    string jobid;
+    timestamp_ms launchTime;
+    int totalMaps;
+    int totalReduces;
+    string jobStatus;
+  }
+
+  record JobSubmitted {
+    string jobid;
+    string jobName;
+    string userName;
+    timestamp_ms submitTime;
+    local_timestamp_ms submitTimeLocal;
+    string jobConfPath;
+  }
+
+  // ... TODO continue
+}

@@ -1,0 +1,4 @@
+
+
+include aingle/*.ain aingle/tether/*.avpr 
+include aingle/VERSION.txt aingle/LICENSE aingle/NOTICE

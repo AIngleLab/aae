@@ -1,0 +1,95 @@
+/**
+
+ */
+
+/** NOTE: This structure is intended to contain names that are likely to cause collisions with the generated code. */
+
+@namespace("org.apache.aingle.test.specialtypes")
+protocol LetsBreakIt {
+
+    enum Enum {
+        builder,
+        Builder,
+        builderBuider,
+        value,
+        this
+    }
+
+    record One {
+        Enum    this;
+    }
+
+    record Two {
+        union { null, string } this = null;
+        string                 String;
+    }
+
+    record Variables {
+        One       this;
+
+        One       Boolean;
+        One       Integer;
+        One       Long;
+        One       Float;
+        One       String;
+    }
+
+    enum Boolean {
+        Yes,
+        No
+    }
+
+    record String {
+        string value;
+    }
+
+    record builder {
+        One      this;
+        Two      builder;
+    }
+
+    record builderBuilder {
+        One      this;
+        Two      that;
+    }
+
+    record Builder {
+        One      this;
+        Two      that;
+    }
+
+    record value {
+        One      this;
+        Two      that;
+    }
+
+    record Types {
+      Boolean one;
+      builder two;
+      Builder three;
+      builderBuilder four;
+      String five;
+      value six;
+    }
+
+    record Names {
+      string Boolean;
+      string builder;
+      string Builder;
+      string builderBuilder;
+      string String;
+      string value;
+    }
+
+    record TopLevelDomainNames {
+      string org;
+      string aingle;
+      string com;
+      string net;
+      string nl;
+    }
+
+    record Exception {
+      string whatever;
+    }
+}

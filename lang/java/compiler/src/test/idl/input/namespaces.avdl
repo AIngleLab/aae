@@ -1,0 +1,28 @@
+/**
+
+ */
+
+@namespace("aingle.test.protocol")
+protocol TestNamespace {
+  @namespace("aingle.test.fixed")
+  fixed FixedInOtherNamespace(16);
+
+  fixed FixedInThisNamespace(16);
+
+  @namespace("aingle.test.record")
+  record RecordInOtherNamespace {}
+
+  @namespace("aingle.test.error")
+  error ErrorInOtherNamespace {}
+
+  @namespace("aingle.test.enum")
+  enum EnumInOtherNamespace { FOO }
+
+  record RefersToOthers {
+    aingle.test.fixed.FixedInOtherNamespace someFixed;
+    aingle.test.record.RecordInOtherNamespace someRecord;
+    aingle.test.error.ErrorInOtherNamespace someError;
+    aingle.test.enum.EnumInOtherNamespace someEnum;
+    FixedInThisNamespace thisFixed;
+  }
+}

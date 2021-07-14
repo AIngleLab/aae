@@ -1,0 +1,31 @@
+
+
+name: Test C++
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+    paths:
+    - '.github/workflows/test-lang-c\+\+.yml'
+    - 'lang/c\+\+/**'
+
+defaults:
+  run:
+    working-directory: lang/c++
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: sudo apt-get install -qqy cppcheck libboost-all-dev libsnappy-dev
+
+      - name: Lint
+        run: ./build.sh lint
+
+      - name: Test
+        run: ./build.sh test

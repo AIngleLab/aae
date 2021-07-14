@@ -1,0 +1,15 @@
+
+# Pull Request Labeler Github Action Configuration: https://github.com/marketplace/actions/labeler
+
+C: ["lang/c/**/*"]
+C++: ["lang/c++/**/*"]
+C#: ["lang/csharp/**/*"]
+Java: ["lang/java/**/*"]
+Js: ["lang/js/**/*"]
+Perl: ["lang/perl/**/*"]
+Php: ["lang/php/**/*"]
+Python: ["lang/py/**/*"]
+Ruby: ["lang/ruby/**/*"]
+Rust: ["lang/rust/**/*"]
+build: ["**/*Dockerfile*", "**/*.sh", "**/*pom.xml", ".github/**/*"]
+website: ["doc/**/*"]

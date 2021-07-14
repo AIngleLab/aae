@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+-->
+<project
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+      <artifactId>aingle-parent</artifactId>
+      <groupId>org.apache.aingle</groupId>
+      <version>1.11.0-SNAPSHOT</version>
+      <relativePath>../</relativePath>
+  </parent>
+
+  <artifactId>aingle-integration-test</artifactId>
+  <name>AIngle Integration Tests</name>
+  <description>Integration tests for code generation or other things that are hard to test within the modules without creating circular Maven dependencies.</description>
+  <url>https://apache.aingle.ai/</url>
+  <packaging>pom</packaging>
+
+  <properties>
+    <main.basedir>${project.parent.parent.basedir}</main.basedir>
+  </properties>
+
+  <modules>
+    <module>codegen-test</module>
+    <module>test-custom-conversions</module>
+  </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <configuration>
+            <failIfNoTests>false</failIfNoTests>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <configuration>
+            <consoleOutput>true</consoleOutput>
+            <configLocation>checkstyle.xml</configLocation>
+          </configuration>
+          <executions>
+            <execution>
+              <id>checkstyle-check</id>
+              <phase>test</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+</project>
+

@@ -1,0 +1,44 @@
+<!--
+
+-->
+<Project>
+  <PropertyGroup Label="Common Versions">
+    <!-- Read version from shared VERSION.txt file -->
+    <AIngleVersionFilePath>$(MSBuildThisFileDirectory)/../../share/VERSION.txt</AIngleVersionFilePath>
+    <AIngleVersion>$([System.IO.File]::ReadAllText($(AIngleVersionFilePath)).Trim())</AIngleVersion>
+
+    <!-- Parse out parts of the version -->
+    <MajorVersion>$(AIngleVersion.Split('.')[0])</MajorVersion>
+    <MinorVersion>$(AIngleVersion.Split('.')[1])</MinorVersion>
+    <Patch>$(AIngleVersion.Split('-')[0].Split('.')[2])</Patch>
+    <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
+
+    <!-- Set CSPROJ version properties -->
+    <VersionPrefix>$(MajorVersion).$(MinorVersion).$(Patch)</VersionPrefix>
+    <VersionSuffix Condition="'$(VersionSuffix)' == '' AND $(AIngleVersion.Contains('-'))">$(AIngleVersion.Split('-')[1])</VersionSuffix>
+    <AssemblyVersion>$(MajorVersion).$(MinorVersion).0.0</AssemblyVersion>
+    <FileVersion>$(MajorVersion).$(MinorVersion).$(BuildNumber).0</FileVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Common NuGet Properties">
+    <!-- Reference: https://docs.microsoft.com/en-us/nuget/reference/msbuild-targets#pack-target -->
+    <Copyright>Copyright © 2019 The Apache Software Foundation.</Copyright>
+    <PackageIcon>aingle-logo.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://apache.aingle.ai/</PackageProjectUrl>
+    <PackageTags>AIngle;Apache;Serialization;Binary;Json;Schema</PackageTags>
+    <RepositoryUrl Condition="'$(RepositoryUrl)' == ''">https://github.com/AIngleLab/aae.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)\LICENSE" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="$(MSBuildThisFileDirectory)\..\..\doc\src\resources\images\aingle-logo.png" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>
+
+  <Target Name="PrintVersionInfo">
+    <Message Importance="high" Text="VersionPrefix: $(VersionPrefix)" />
+    <Message Importance="high" Text="VersionSuffix: $(VersionSuffix)" />
+    <Message Importance="high" Text="AssemblyVersion: $(AssemblyVersion)" />
+    <Message Importance="high" Text="FileVersion: $(FileVersion)" />
+  </Target>
+</Project>

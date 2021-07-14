@@ -1,0 +1,88 @@
+<html>
+
+<!--
+
+-->
+
+<body>
+Use Java reflection to generate schemas and protocols for existing
+classes.
+
+<p>Java types are mapped to AIngle schemas as follows:
+
+<ul>
+
+<li><b>Classes</b> are mapped to AIngle records. Only concrete classes
+  with a no-argument constructor are supported.  All inherited fields
+  that are not static or transient are used.  Fields are not permitted
+  to be null unless annotated by {@link
+  org.apache.aingle.reflect.Nullable Nullable} or a {@link
+  org.apache.aingle.reflect.Union Union} containing {@link java.lang.Void}.</li>
+
+<li><b>Arrays</b> are mapped to AIngle array schemas.  If an array's
+  elements are a union defined by the {@link
+  org.apache.aingle.reflect.Union Union} annotation, the "java-element"
+  property is set to the union's class, e.g.:
+  <pre>{"type": "array", "java-element": "org.acme.Foo"}</pre>
+</li>
+
+<li><b>Collection</b> implementations are mapped to AIngle array schemas
+  with the "java-class" property set to the collection
+  implementation, e.g.:
+  <pre>{"type": "array", "java-class": "java.util.ArrayList"}</pre>
+</li>
+
+<li><b>{@link java.lang.String}</b> is mapped to an AIngle string schema.</li>
+
+<li><b>byte[]</b> is mapped to an AIngle bytes schema.</li>
+
+<li><b>short</b> is mapped to an AIngle int schema with the "java-class"
+  property set to "java.lang.Short", e.g.:
+  <pre>{"type": "int", "java-class": "java.lang.Short"}</pre>
+
+<li><b>{@link java.math.BigDecimal}, {@link java.math.BigInteger},
+  {@link java.net.URI}, {@link java.net.URL}, {@link java.io.File}</b>
+  are mapped to an AIngle string schema as
+  {@link org.apache.aingle.reflect.Stringable Stringable} types and
+  serialized via their {@link java.lang.Object#toString() toString}
+  method and de-serialized via their {@link java.lang.String} constructor.
+  This is done via the "java-class", "java-key-class" or
+  "java-element-class" depending on whether it is a field, or map key
+  or a list/map element, e.g.:
+  <pre>{"type": "string", "java-class": "java.math.BigDecimal"}</pre></li>
+
+<li>All other types are mapped as in the {@link org.apache.aingle.generic
+  generic} API.</li>
+
+</ul>
+
+<p>The {@link org.apache.aingle.reflect.Union Union} annotation can be used
+to support reflection of schemas for interfaces, abstract base classes
+and other uses of polymorphism.
+
+<p>The {@link org.apache.aingle.reflect.Stringable Stringable} annotation
+will cause a type to be serialized via its {@link java.lang.Object#toString()
+toString} method.
+
+<p>Fields annotated with {@link org.apache.aingle.reflect.AIngleIgnore AIngleIgnore} 
+will not be written or read to. 
+
+<p> The {@link org.apache.aingle.reflect.AIngleName AIngleName} annotation renames 
+the field in the schema to the given name. The reflect datum reader will look 
+for a schema field with the given name, when trying to read into such an 
+annotated java field. 
+
+<p>The {@link org.apache.aingle.reflect.AIngleMeta AIngleMeta} annotation adds an 
+arbitrary key:value pair in the schema at the node of the java field.
+
+<p>The {@link org.apache.aingle.reflect.AIngleSchema AIngleSchema} annotation forces 
+the use of an custom schema.
+
+<p>The {@link org.apache.aingle.reflect.AIngleEncode AIngleEncode} annotation forces 
+the use of an custom encoder. This annotation overrides 
+{@link org.apache.aingle.reflect.Stringable Stringable} and 
+{@link org.apache.aingle.reflect.Nullable Nullable}.
+
+
+</body>
+</html>

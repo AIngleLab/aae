@@ -1,0 +1,12 @@
+/**
+
+ */
+@namespace("test")
+protocol IdlClasspathImportTest {
+    import idl "aingle/User.avdl";
+
+    record IdlUserWrapper {
+      union { null, test.IdlUser } wrapped;
+    }
+
+}
