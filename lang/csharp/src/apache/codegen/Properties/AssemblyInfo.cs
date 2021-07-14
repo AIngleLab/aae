@@ -1,4 +1,4 @@
-﻿/**
+/**
 
  */
 
@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AIngle.codegen")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Apache")]
+[assembly: AssemblyCompany("Aingle")]
 [assembly: AssemblyProduct("AIngle.codegen")]
-[assembly: AssemblyCopyright("Copyright © Apache 2013")]
+[assembly: AssemblyCopyright("Copyright © Aingle 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

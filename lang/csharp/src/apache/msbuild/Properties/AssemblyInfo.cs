@@ -1,4 +1,4 @@
-﻿/**
+/**
 
  */
 
@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AIngle.msbuild")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Apache")]
+[assembly: AssemblyCompany("AIngle")]
 [assembly: AssemblyProduct("AIngle.msbuild")]
-[assembly: AssemblyCopyright("Copyright © Apache 2013")]
+[assembly: AssemblyCopyright("Copyright © AIngle 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

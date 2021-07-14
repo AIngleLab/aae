@@ -24,7 +24,7 @@
 
   <PropertyGroup>
     <!-- NuGet Package Settings -->
-    <PackageId>Apache.AIngle.Tools</PackageId>
+    <PackageId>AIngle.Apache.Tools</PackageId>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>ainglegen</ToolCommandName>
     <Description>

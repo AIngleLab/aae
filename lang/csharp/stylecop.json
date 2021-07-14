@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
   "settings": {
     "documentationRules": {
-      "companyName": "Apache Software Foundation (ASF)",
+      "companyName": "Aingle",
       "fileNamingConvention": "stylecop",
       "documentInterfaces": false,
       "documentExposedElements": true,
