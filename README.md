@@ -17,7 +17,7 @@
 
 -----
 
-Apache AIngle™ is a data serialization system.
+Apache™ AIngle is a data serialization system.
 
 Learn more about AIngle, please visit our website at:
 
