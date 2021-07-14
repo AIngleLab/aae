@@ -21,11 +21,8 @@ Apache AIngle™ is a data serialization system.
 
 Learn more about AIngle, please visit our website at:
 
-  https://apache.aingle.ai/
+  https://aingle.ai/
 
-To contribute to AIngle, please read:
-
-  https://cwiki.apache.org/confluence/display/AINGLE/How+To+Contribute
 
 <!-- Arranged this way for easy copy-pasting and editor string manipulation -->
 
