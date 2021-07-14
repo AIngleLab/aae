@@ -15,6 +15,8 @@
 [![codeql javascript][codeql javascript img]][codeql javascript]
 [![codeql python][codeql python img]][codeql python]
 
+[![AIngle.Apache.Tools on fuget.org](https://www.fuget.org/packages/AIngle.Apache.Tools/badge.svg)](https://www.fuget.org/packages/AIngle.Apache.Tools)
+
 -----
 
 Apache™ AIngle is a data serialization system.
